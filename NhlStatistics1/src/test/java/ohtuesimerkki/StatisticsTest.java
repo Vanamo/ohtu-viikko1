@@ -91,33 +91,30 @@ public class StatisticsTest {
     @Test
     public void returnsTop3Scorers() {
         int howMany = 3;
-        Object[] expResult = {"Gretzky", "Lemieux", "Yzerman"};
+        List<Player> expResult = new ArrayList<>();
+        expResult.add(new Player("Gretzky", "EDM", 35, 89));
+        expResult.add(new Player("Lemieux", "PIT", 45, 54));
+        expResult.add(new Player("Yzerman", "DET", 42, 56));
 
-        List<Player> players = stats.topScorers(howMany);
-        Object[] result = new Object[3];
-        for (int i = 0; i <= howMany; i++) {
-            result[i] = players.get(i).getName();
-        }
+        List<Player> result = stats.topScorers(howMany);
         
-        assertArrayEquals(expResult, result);
+        assertEquals(expResult.toString(), result.toString());
     }
     
     @Test
     public void returnsAllScorers() {
         int howMany = 10;
-        List<String> expResult = new ArrayList<>();
-        expResult.add("Gretzky");
-        expResult.add("Lemieux");
-        expResult.add("Yzerman");
-        expResult.add("Kurri");
-        expResult.add("Semenko");
+            ArrayList<Player> expResult = new ArrayList<Player>();
+ 
+            expResult.add(new Player("Gretzky", "EDM", 35, 89)); //124
+            expResult.add(new Player("Lemieux", "PIT", 45, 54)); //99
+            expResult.add(new Player("Yzerman", "DET", 42, 56)); //98
+            expResult.add(new Player("Kurri",   "EDM", 37, 53)); //90
+            expResult.add(new Player("Semenko", "EDM", 4, 12));
 
-        List<Player> players = stats.topScorers(howMany);
-        ArrayList<String> result = new ArrayList<>();
-        for (Player player : players) {
-            result.add(player.getName());
-        }
-        assertEquals(expResult, result);
+        List<Player> result = stats.topScorers(howMany);
+
+        assertEquals(expResult.toString(), result.toString());
     }    
     
     @Test
