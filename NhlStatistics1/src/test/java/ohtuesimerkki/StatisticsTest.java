@@ -46,7 +46,6 @@ public class StatisticsTest {
     @Test
     public void searchFindsPlayer() {
         String name = "Kurri";
-        Player expResult = new Player("Kurri", "EDM", 37, 53);
         Player result = stats.search(name);
         assertEquals(name, result.getName());
     }
