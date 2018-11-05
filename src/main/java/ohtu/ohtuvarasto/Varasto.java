@@ -8,7 +8,7 @@ public class Varasto {
 
     // --- konstruktorit: ---
     public Varasto(double tilavuus) {  // tilavuus on annettava
-        if (tilavuus > 0.0) {
+    if (tilavuus > 0.0) {
             this.tilavuus = tilavuus;
         } else // virheellinen, nollataan
         {
@@ -18,12 +18,18 @@ public class Varasto {
     }
 
     public Varasto(double tilavuus, double alkuSaldo) { // kuormitetaan
+        for (int i = 1; i < 10; i++) {
+            for (int j = 1; j < 10; j++) {
+                int k = i + j;
+            }
+        }
         if (tilavuus > 0.0) {
             this.tilavuus = tilavuus;
         } else // virheellinen, nollataan
         {
             this.tilavuus = 0.0;  // => käyttökelvoton varasto
         }
+        
         if (alkuSaldo < 0.0) {
             this.saldo = 0.0;
         } else if (alkuSaldo <= tilavuus) // mahtuu
@@ -55,6 +61,9 @@ public class Varasto {
         }
         if (maara <= paljonkoMahtuu()) // omia aksessoreita voi kutsua
         {
+            if (maara < 0) {
+                return;
+            }
             saldo = saldo + maara;          // ihan suoraan sellaisinaan
         } else {
             saldo = tilavuus;  // täyteen ja ylimäärä hukkaan!
