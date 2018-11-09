@@ -1,7 +1,5 @@
 package ohtu;
 
-import java.util.ArrayList;
-
 public class Submission {
     private int week;
     private double hours;
@@ -36,10 +34,10 @@ public class Submission {
         return exercises;
     }
     
-    public String setCourse() {
+    public String getCourse() {
         return course;
-    }
-    
+    }    
+
     @Override
     public String toString() {
         String exerciseString = "";
