@@ -101,5 +101,11 @@ class Course {
         this.exercises = exercises;
     }
     
-    
+    public int getExercisesSum() {
+        int sum = 0;
+        for (int ex : this.exercises) {
+            sum += ex;
+        }
+        return sum;
+    }
 }

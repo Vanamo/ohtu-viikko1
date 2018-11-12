@@ -1,6 +1,7 @@
 package ohtu;
 
 public class Submission {
+
     private int week;
     private double hours;
     private int[] exercises;
@@ -13,15 +14,15 @@ public class Submission {
     public void setHours(int hours) {
         this.hours = hours;
     }
-    
+
     public void setExercises(int[] exercises) {
         this.exercises = exercises;
     }
-    
+
     public void setCourse(String course) {
         this.course = course;
     }
-    
+
     public int getWeek() {
         return week;
     }
@@ -29,17 +30,16 @@ public class Submission {
     public double getHours() {
         return hours;
     }
-    
+
     public int[] getExercises() {
         return exercises;
     }
-    
+
     public String getCourse() {
         return course;
-    }    
+    }
 
-    @Override
-    public String toString() {
+    public String getExerciseString() {
         String exerciseString = "";
         for (int i = 0; i < exercises.length; i++) {
             if (i != 0) {
@@ -47,8 +47,13 @@ public class Submission {
             }
             exerciseString += exercises[i];
         }
-        return "" + course + ", viikko " + week + " tehtyjä tehtäviä yhteensä " + exercises.length
-                + " aikaa kului " + hours + " tehdyt tehtävät " + exerciseString;
+        return exerciseString;
     }
-    
+
+    @Override
+    public String toString() {
+        return "" + course + ", viikko " + week + " tehtyjä tehtäviä yhteensä " + exercises.length
+                + " aikaa kului " + hours + " tehdyt tehtävät " + this.getExerciseString();
+    }
+
 }
