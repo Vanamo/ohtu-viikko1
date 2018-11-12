@@ -1,9 +1,13 @@
 package ohtu;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import java.io.IOException;
 import java.util.HashMap;
 import org.apache.http.client.fluent.Request;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class Main {
 
@@ -21,6 +25,12 @@ public class Main {
         String courseInfoUrl = "https://studies.cs.helsinki.fi/courses/courseinfo";
         String courseInfoText = Request.Get(courseInfoUrl).execute().returnContent().asString();
 
+        String ohtuStatsUrl = "https://studies.cs.helsinki.fi/courses/ohtu2018/stats";
+        String ohtuStatsText = Request.Get(ohtuStatsUrl).execute().returnContent().asString();
+
+        String railsStatsUrl = "https://studies.cs.helsinki.fi/courses/rails2018/stats";
+        String railsStatsText = Request.Get(railsStatsUrl).execute().returnContent().asString();
+
 //        System.out.println("json-muotoinen data:");
 //        System.out.println( bodyText );
 //        System.out.println( courseInfoText );
@@ -29,6 +39,23 @@ public class Main {
 
         Course[] courses = mapper.fromJson(courseInfoText, Course[].class);
 
+        JsonParser parser = new JsonParser();
+        JsonObject parsedOhtu = parser.parse(ohtuStatsText).getAsJsonObject();
+
+        JsonObject parsedRails = parser.parse(railsStatsText).getAsJsonObject();
+
+        //CourseWeek[] ohtuWeeks;
+        Integer i = 0;
+        while (true) {
+            i++;
+            String element = i.toString();
+            String ohtuText = parsedOhtu.get(element).toString();
+            System.out.println("ohtu " + ohtuText);
+            if (ohtuText.isEmpty()) break;
+        }
+
+
+//        System.out.println("parsed " + parsedOhtu.get("1").toString());
 //        System.out.println("kurssi " + courses[0].getId());
         for (Course course : courses) {
             int subExercisesSum = 0;
@@ -58,6 +85,7 @@ public class Main {
                 }
                 System.out.println("\nyhteensä: " + subExercisesSum + "/" + course.getExercisesSum()
                         + " tehtävää " + hoursSum + " tuntia\n");
+
             }
         }
     }
