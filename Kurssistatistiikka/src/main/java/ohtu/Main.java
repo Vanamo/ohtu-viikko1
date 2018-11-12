@@ -44,16 +44,8 @@ public class Main {
 
         JsonObject parsedRails = parser.parse(railsStatsText).getAsJsonObject();
 
-        //CourseWeek[] ohtuWeeks;
-        Integer i = 0;
-        while (true) {
-            i++;
-            String element = i.toString();
-            String ohtuText = parsedOhtu.get(element).toString();
-            System.out.println("ohtu " + ohtuText);
-            if (ohtuText.isEmpty()) break;
-        }
-
+        CourseStatistics ohtuStatistics = new CourseStatistics(parsedOhtu);
+        CourseStatistics railsStatistics = new CourseStatistics(parsedRails);
 
 //        System.out.println("parsed " + parsedOhtu.get("1").toString());
 //        System.out.println("kurssi " + courses[0].getId());
@@ -86,6 +78,11 @@ public class Main {
                 System.out.println("\nyhteensä: " + subExercisesSum + "/" + course.getExercisesSum()
                         + " tehtävää " + hoursSum + " tuntia\n");
 
+                if (course.getName().equals("ohtu2018")) {
+                    System.out.println(ohtuStatistics.toString());
+                } else if (course.getName().equals("rails2018")) {
+                    System.out.println(railsStatistics.toString());
+                }
             }
         }
     }
