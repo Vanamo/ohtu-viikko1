@@ -17,6 +17,8 @@ public class Stepdefs {
     UserDao userDao = new InMemoryUserDao();
     AuthenticationService auth = new AuthenticationService(userDao);
     List<String> inputLines = new ArrayList<>();
+    List<String> newInputLines = new ArrayList<>();
+    List<String> thirdInputLines = new ArrayList<>();
 
     @Given("^command login is selected$")
     public void command_login_selected() throws Throwable {
@@ -70,15 +72,15 @@ public class Stepdefs {
 
     @Given("^command new user is selected$")
     public void command_new_user_is_selected() throws Throwable {
-        inputLines.add("new");
+        newInputLines.add("new");
     }
 
     @When("^valid username \"([^\"]*)\" and password \"([^\"]*)\" are entered$")
     public void valid_username_and_password_are_entered(String username, String password) throws Throwable {
-        inputLines.add(username);
-        inputLines.add(password);
+        newInputLines.add(username);
+        newInputLines.add(password);
 
-        io = new StubIO(inputLines);
+        io = new StubIO(newInputLines);
         app = new App(io, auth);
         app.run();
     }
@@ -90,10 +92,10 @@ public class Stepdefs {
 
     @When("^already taken username \"([^\"]*)\" and password \"([^\"]*)\" are entered$")
     public void already_taken_username_and_password_are_entered(String username, String password) throws Throwable {
-        inputLines.add(username);
-        inputLines.add(password);
+        newInputLines.add(username);
+        newInputLines.add(password);
 
-        io = new StubIO(inputLines);
+        io = new StubIO(newInputLines);
         app = new App(io, auth);
         app.run();
     }
@@ -105,10 +107,10 @@ public class Stepdefs {
 
     @When("^too short username \"([^\"]*)\" and password \"([^\"]*)\" are entered$")
     public void too_short_username_and_password_are_entered(String username, String password) throws Throwable {
-        inputLines.add(username);
-        inputLines.add(password);
+        newInputLines.add(username);
+        newInputLines.add(password);
 
-        io = new StubIO(inputLines);
+        io = new StubIO(newInputLines);
         app = new App(io, auth);
         app.run();        
     }
@@ -120,10 +122,10 @@ public class Stepdefs {
 
     @When("^valid username \"([^\"]*)\" and too short password \"([^\"]*)\" are entered$")
     public void valid_username_and_too_short_password_are_entered(String username, String password) throws Throwable {
-        inputLines.add(username);
-        inputLines.add(password);
+        newInputLines.add(username);
+        newInputLines.add(password);
 
-        io = new StubIO(inputLines);
+        io = new StubIO(newInputLines);
         app = new App(io, auth);
         app.run();  
     }
@@ -135,10 +137,10 @@ public class Stepdefs {
 
     @When("^valid username \"([^\"]*)\" and password with only letters \"([^\"]*)\" are entered$")
     public void valid_username_and_password_with_only_letters_are_entered(String username, String password) throws Throwable {
-        inputLines.add(username);
-        inputLines.add(password);
+        newInputLines.add(username);
+        newInputLines.add(password);
 
-        io = new StubIO(inputLines);
+        io = new StubIO(newInputLines);
         app = new App(io, auth);
         app.run();  
     }
@@ -150,10 +152,13 @@ public class Stepdefs {
 
     @Given("^user \"([^\"]*)\" with password \"([^\"]*)\" is created$")
     public void user_with_password_is_created(String username, String password) throws Throwable {
-        inputLines.add(username);
-        inputLines.add(password);
+        thirdInputLines.add("new");
+        thirdInputLines.add(username);
+        thirdInputLines.add(password);
+        
+        thirdInputLines.add("login");
 
-        io = new StubIO(inputLines);
+        io = new StubIO(thirdInputLines);
         app = new App(io, auth);
         app.run(); 
     }

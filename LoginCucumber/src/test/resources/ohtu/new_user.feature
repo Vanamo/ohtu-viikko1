@@ -2,7 +2,7 @@ Feature: A new user account can be created if a proper unused username and passw
 
     Scenario: creation is successful with valid username and password
         Given command new user is selected
-        When  valid username "vanamo" and password " alainen" are entered
+        When  valid username "vanamo" and password "3alainen" are entered
         Then  system will respond with success message "new user registered"
     
     Scenario: creation fails with already taken username and valid password
