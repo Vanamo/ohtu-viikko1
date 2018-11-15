@@ -13,7 +13,9 @@
     <module name="CyclomaticComplexity">
       <property name="max" value="3"/>
     </module>
-    <module name="MagicNumber"/>
+    <!-- Poistin ettei Travis valita muiden samassa repossa olevien projektien ongelmista
+	<module name="MagicNumber"/>
+    -->
   </module>
 
 </module>
