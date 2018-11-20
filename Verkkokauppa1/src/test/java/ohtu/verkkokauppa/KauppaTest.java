@@ -49,7 +49,7 @@ public class KauppaTest {
         // määritellään että tuote numero 2 on leipä jonka hinta on 1 ja saldo 1
         when(varasto.saldo(2)).thenReturn(1);
         when(varasto.haeTuote(2)).thenReturn(new Tuote(2, "leipä", 1));
-        
+
         // sitten testattava kauppa 
         Kauppa k = new Kauppa(varasto, pankki, viite);
 
@@ -64,7 +64,7 @@ public class KauppaTest {
         verify(pankki).tilisiirto("pekka", 45, "12345", "33333-44455", 6);
         // toistaiseksi ei välitetty kutsussa käytetyistä parametreista
     }
-    
+
     @Test
     public void kahdenSamanOstoksenPaaytyttyaPankinMetodiaTilisiirtoKutsutaan() {
         // luodaan ensin mock-oliot
@@ -78,7 +78,7 @@ public class KauppaTest {
         // määritellään että tuote numero 1 on maito jonka hinta on 5 ja saldo 10
         when(varasto.saldo(1)).thenReturn(10);
         when(varasto.haeTuote(1)).thenReturn(new Tuote(1, "maito", 5));
-        
+
         // sitten testattava kauppa 
         Kauppa k = new Kauppa(varasto, pankki, viite);
 
@@ -93,7 +93,7 @@ public class KauppaTest {
         verify(pankki).tilisiirto("pekka", 50, "12345", "33333-44455", 10);
         // toistaiseksi ei välitetty kutsussa käytetyistä parametreista
     }
-    
+
     @Test
     public void koriinTuoteJokaOnLoppuMetodiaTilisiirtoKutsutaan() {
         // luodaan ensin mock-oliot
@@ -110,7 +110,7 @@ public class KauppaTest {
         // määritellään että tuote numero 2 on leipä jonka hinta on 1 ja saldo 0
         when(varasto.saldo(2)).thenReturn(0);
         when(varasto.haeTuote(2)).thenReturn(new Tuote(2, "leipä", 1));
-        
+
         // sitten testattava kauppa 
         Kauppa k = new Kauppa(varasto, pankki, viite);
 
@@ -123,6 +123,117 @@ public class KauppaTest {
         // sitten suoritetaan varmistus, että pankin metodia tilisiirto on kutsuttu
         //verify(pankki).tilisiirto(anyString(), anyInt(), anyString(), anyString(), anyInt());
         verify(pankki).tilisiirto("pekka", 60, "12345", "33333-44455", 5);
+        // toistaiseksi ei välitetty kutsussa käytetyistä parametreista
+    }
+
+    @Test
+    public void aloitaAsiointiNollaaEdellisenOstoksenTiedot() {
+        // luodaan ensin mock-oliot
+        Pankki pankki = mock(Pankki.class);
+
+        Viitegeneraattori viite = mock(Viitegeneraattori.class);
+        // määritellään että viitegeneraattori palauttaa viitten 70
+        when(viite.uusi()).thenReturn(70);
+
+        Varasto varasto = mock(Varasto.class);
+        // määritellään että tuote numero 1 on maito jonka hinta on 5 ja saldo 10
+        when(varasto.saldo(1)).thenReturn(10);
+        when(varasto.haeTuote(1)).thenReturn(new Tuote(1, "maito", 5));
+
+        // sitten testattava kauppa 
+        Kauppa k = new Kauppa(varasto, pankki, viite);
+
+        // tehdään ostokset
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);     // ostetaan tuotetta numero 1 eli maitoa
+        k.tilimaksu("pekka", "12345");
+
+        //aloitetaan uusi asiointi
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);     // ostetaan tuotetta numero 1 eli maitoa
+        k.lisaaKoriin(1);     // ostetaan tuotetta numero 1 eli maitoa
+        k.tilimaksu("pekka", "12345");
+
+        // sitten suoritetaan varmistus, että pankin metodia tilisiirto on kutsuttu
+        //verify(pankki).tilisiirto(anyString(), anyInt(), anyString(), anyString(), anyInt());
+        verify(pankki).tilisiirto(anyString(), anyInt(), anyString(), anyString(), eq(10));
+        // toistaiseksi ei välitetty kutsussa käytetyistä parametreista
+    }
+
+    @Test
+    public void kauppaPyytaaUudenViitenumeronJokaiselleMaksutapahtumalle() {
+        // luodaan ensin mock-oliot
+        Pankki pankki = mock(Pankki.class);
+
+        Viitegeneraattori viite = mock(Viitegeneraattori.class);
+        // määritellään että viitegeneraattori palauttaa viitten 1
+        when(viite.uusi()).
+                thenReturn(1).
+                thenReturn(2).
+                thenReturn(3);
+
+        Varasto varasto = mock(Varasto.class);
+        // määritellään että tuote numero 1 on maito jonka hinta on 5 ja saldo 10
+        when(varasto.saldo(1)).thenReturn(10);
+        when(varasto.haeTuote(1)).thenReturn(new Tuote(1, "maito", 5));
+
+        // sitten testattava kauppa 
+        Kauppa k = new Kauppa(varasto, pankki, viite);
+
+        // tehdään ostokset
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);     // ostetaan tuotetta numero 1 eli maitoa
+        k.tilimaksu("pekka", "12345");
+
+        verify(pankki).tilisiirto(anyString(), eq(1), anyString(), anyString(), anyInt());
+
+        //aloitetaan uusi asiointi
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);     // ostetaan tuotetta numero 1 eli maitoa
+        k.tilimaksu("pekka", "12345");
+
+        // sitten suoritetaan varmistus, että pankin metodia tilisiirto on kutsuttu
+        //verify(pankki).tilisiirto(anyString(), anyInt(), anyString(), anyString(), anyInt());
+        verify(pankki).tilisiirto(anyString(), eq(2), anyString(), anyString(), anyInt());
+
+        //aloitetaan uusi asiointi
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);     // ostetaan tuotetta numero 1 eli maitoa
+        k.tilimaksu("pekka", "12345");
+
+        // sitten suoritetaan varmistus, että pankin metodia tilisiirto on kutsuttu
+        //verify(pankki).tilisiirto(anyString(), anyInt(), anyString(), anyString(), anyInt());
+        verify(pankki).tilisiirto(anyString(), eq(3), anyString(), anyString(), anyInt());
+
+    }
+
+    @Test
+    public void poistaKoristaVahentaaSummaaTuotteenHinnalla() {
+        // luodaan ensin mock-oliot
+        Pankki pankki = mock(Pankki.class);
+
+        Viitegeneraattori viite = mock(Viitegeneraattori.class);
+        // määritellään että viitegeneraattori palauttaa viitten 70
+        when(viite.uusi()).thenReturn(70);
+
+        Varasto varasto = mock(Varasto.class);
+        // määritellään että tuote numero 1 on maito jonka hinta on 5 ja saldo 10
+        when(varasto.saldo(1)).thenReturn(10);
+        when(varasto.haeTuote(1)).thenReturn(new Tuote(1, "maito", 5));
+
+        // sitten testattava kauppa 
+        Kauppa k = new Kauppa(varasto, pankki, viite);
+
+        // tehdään ostokset
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);     // ostetaan tuotetta numero 1 eli maitoa
+        k.poistaKorista(1);
+        k.tilimaksu("pekka", "12345");
+
+
+        // sitten suoritetaan varmistus, että pankin metodia tilisiirto on kutsuttu
+        //verify(pankki).tilisiirto(anyString(), anyInt(), anyString(), anyString(), anyInt());
+        verify(pankki).tilisiirto(anyString(), anyInt(), anyString(), anyString(), eq(0));
         // toistaiseksi ei välitetty kutsussa käytetyistä parametreista
     }
 }
