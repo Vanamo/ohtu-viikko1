@@ -20,7 +20,6 @@ public class HasAtLeast implements Matcher {
             Method method = p.getClass().getMethod(fieldName);
             int playersValue = (Integer)method.invoke(p);
             boolean b = playersValue>=value;
-            System.out.println("p: " + p + " hasAtLeast: " + b);
             return playersValue>=value;
             
         } catch (Exception ex) {

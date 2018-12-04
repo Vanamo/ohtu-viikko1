@@ -39,7 +39,6 @@ class QueryBuilder {
     }
     
     QueryBuilder oneOf(Matcher... matchers) {
-        System.out.println("matchers: " + matchers.length);
         this.matcher = new Or(matchers);
         return this;
     }

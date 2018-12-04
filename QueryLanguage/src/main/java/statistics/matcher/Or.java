@@ -17,14 +17,12 @@ public class Or implements Matcher {
     
     public Or(Matcher... matchers) {
         this.matchers = matchers;
-        System.out.println("or matchers: " + matchers.length);
     }
 
     
     @Override
     public boolean matches(Player p) {
         for (Matcher m : matchers) {
-            System.out.println("p: " + p + "m: " + m.matches(p));
             if (m.matches(p)) return true;
         }
         return false;

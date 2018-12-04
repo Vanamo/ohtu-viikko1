@@ -10,10 +10,10 @@ public class Main {
 
 //        Matcher m = query.playsIn("EDM").hasAtLeast(60, "points").build();
         Matcher m = query.oneOf(
-                query.playsIn("PHI")
+                new QueryBuilder().playsIn("PHI")
                         .hasAtLeast(10, "goals")
                         .hasFewerThan(20, "assists").build(),
-                query.playsIn("EDM")
+                new QueryBuilder().playsIn("EDM")
                         .hasAtLeast(60, "points").build()
         ).build();
 
