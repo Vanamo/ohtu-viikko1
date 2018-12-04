@@ -24,6 +24,9 @@ public class StubIO implements IO {
     }
 
     public ArrayList<String> getPrints() {
+        for (String print : prints) {
+            System.out.println("print: " + print);
+        }
         return prints;
     }
 
