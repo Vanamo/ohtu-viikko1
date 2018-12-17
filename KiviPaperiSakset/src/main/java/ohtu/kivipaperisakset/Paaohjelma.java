@@ -26,9 +26,7 @@ public class Paaohjelma {
 
             if (komennot.containsKey(komento)) {
                 System.out.println("peli loppuu kun pelaaja antaa virheellisen siirron eli jonkun muun kuin k, p tai s");
-                KPSPelaajaVsPelaaja p = new KPSPelaajaVsPelaaja();
-                p.pelaa();
-//komennot.get(komento).pelaa();
+                komennot.get(komento).pelaa();
             } else {
                 break;
             }
